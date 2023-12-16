@@ -3,10 +3,13 @@ const httpStatus = require('http-status');
 const CONFIG = require('../../config/config');
 const logger = require('../../lib/logger/logger');
 const { getMessage } = require('../../utils/messages');
+const Prompt = require('../../models/prompt');
 
 const gemini = async (req, res) => {
   try {
-    let { data: { prompt } } = req.body;
+    const { meta, body } = req;
+    const { reqIp, userAgent } = meta;
+    let { data: { prompt } } = body;
 
     const genAI = new GoogleGenerativeAI(CONFIG.GEMINI_API_KEY);
     const model = genAI.getGenerativeModel({
@@ -21,6 +24,17 @@ const gemini = async (req, res) => {
     const result = await model.generateContent(prompt);
     const { response } = result;
     const text = response.text();
+
+    const promptData = new Prompt({
+      prompt,
+      res: text,
+      reqIp,
+      userAgent,
+      os: userAgent.os,
+      browser: userAgent.browser,
+      deviceType: userAgent.deviceType,
+    });
+    await promptData.save();
 
     if (!text) {
       return res.send(getMessage('FAIL'));

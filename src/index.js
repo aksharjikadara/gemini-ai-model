@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const mongoose = require('mongoose');
 const compression = require('compression');
 const httpStatus = require('http-status');
 const path = require('path');
@@ -15,7 +16,7 @@ const app = express();
 
 app.use(compression());
 
-app.set('trust proxy', true);
+app.set('trust proxy', false);
 
 // CORS AND PARSERS
 app.use(cors());
@@ -23,6 +24,14 @@ app.use(express.json());
 app.use(rateLimitMiddleware);
 app.use(express.static(path.join(__dirname, `.${VIEWS_FOLDER_PATH}`)));
 app.use(express.urlencoded({ extended: true }));
+
+mongoose.connect(CONFIG.DB.CONNECTION_URL)
+  .then(() => {
+    logger.info('Connection Successfully!');
+  })
+  .catch((error) => {
+    logger.info('Connection failed!', error);
+  });
 
 app.use(`${API_PREFIX}`, router);
 
