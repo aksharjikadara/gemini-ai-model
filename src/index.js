@@ -30,3 +30,5 @@ app.get(`${VERSION_ROUTE}`, (req, res) => { res.json({ version: packageJson.vers
 app.listen(CONFIG.PORT, () => {
   logger.info(`server started at http://localhost:${CONFIG.PORT}`);
 });
+
+module.exports = app;
