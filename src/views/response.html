@@ -151,7 +151,14 @@ code {
 /* Media Query for mobile devices */
 @media (max-width: 480px) {
     input {
-        width: 100%;
+        width: 80%;
+    }
+
+    #response-container {
+        border-radius: 20px;
+        overflow-x: auto;
+        overflow-wrap: anywhere;
+        backdrop-filter: blur(20px);
     }
 }
 
