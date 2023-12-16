@@ -1,6 +1,6 @@
 {
   "name": "gemini-ai",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A Gemini AI model using NodeJS",
   "main": "src/index.js",
   "scripts": {
