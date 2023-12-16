@@ -24,8 +24,6 @@ app.use(`${API_PREFIX}`, router);
 
 const homePage = path.join(`${__dirname}${VIEWS_FOLDER_PATH}/home.html`);
 
-console.log(homePage);
-
 app.get('/', (req, res) => { res.status(httpStatus.OK).sendFile(homePage); });
 app.get(`${VERSION_ROUTE}`, (req, res) => { res.json({ version: packageJson.version }); });
 
