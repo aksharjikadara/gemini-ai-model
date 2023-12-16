@@ -25,7 +25,7 @@ app.use(rateLimitMiddleware);
 app.use(express.static(path.join(__dirname, `.${VIEWS_FOLDER_PATH}`)));
 app.use(express.urlencoded({ extended: true }));
 
-mongoose.connect(CONFIG.DB.CONNECTION_URL)
+mongoose.connect(CONFIG.DB.CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     logger.info('Connection Successfully!');
   })
