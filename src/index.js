@@ -15,6 +15,8 @@ const app = express();
 
 app.use(compression());
 
+app.set('trust proxy', true);
+
 // CORS AND PARSERS
 app.use(cors());
 app.use(express.json());
