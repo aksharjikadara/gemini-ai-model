@@ -4,6 +4,7 @@ const compression = require('compression');
 const httpStatus = require('http-status');
 const path = require('path');
 
+const { rateLimitMiddleware } = require('./middlewares');
 const CONFIG = require('./config/config');
 const { VERSION_ROUTE, API_PREFIX, VIEWS_FOLDER_PATH } = require('./constants/api-constant');
 const packageJson = require('../package.json');
@@ -17,6 +18,7 @@ app.use(compression());
 // CORS AND PARSERS
 app.use(cors());
 app.use(express.json());
+app.use(rateLimitMiddleware);
 app.use(express.static(path.join(__dirname, `.${VIEWS_FOLDER_PATH}`)));
 app.use(express.urlencoded({ extended: true }));
 

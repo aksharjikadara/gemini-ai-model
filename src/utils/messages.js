@@ -1,5 +1,5 @@
 const messages = {
-  SUCCESS: 'Response generated successfully!',
+  SUCCESS: 'Response generated successfully for {{ip}}!',
   FAIL: 'Gemini still in learning phase, Unable to process your request at the moment, please try again later!',
   REQUIRED_PROMPT: 'Prompt is required, please enter the valid prompt!',
 };

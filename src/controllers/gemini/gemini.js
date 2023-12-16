@@ -25,7 +25,7 @@ const gemini = async (req, res) => {
     if (!text) {
       return res.send(getMessage('FAIL'));
     }
-    logger.info(getMessage('SUCCESS'));
+    logger.info(getMessage('SUCCESS').replace('{{ip}}', req.meta.reqIp));
     return res.status(httpStatus.OK).send(text);
   } catch (error) {
     throw new Error(`Error from gemini : ${error}`);
