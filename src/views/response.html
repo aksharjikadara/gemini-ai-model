@@ -55,6 +55,10 @@
             text-align: center;
         }
 
+        input:focus {
+            outline: none;
+        }       
+
         ::placeholder {
             -webkit-user-select: none;
             -ms-user-select: none;
@@ -170,7 +174,7 @@
 <body>
     <h1>Get what you thought</h1>
 
-    <input type="text" id="userPrompt" placeholder="Enter a prompt here">
+    <input type="text" id="userPrompt" placeholder="Enter a prompt here" onkeydown="handleKeyPress(event)">
     <div id="buttons">
         <button style="width: max-content; margin-top: 0;"><a href="home.html"
                 style="color: white; text-decoration: none; font-size: 18px;"><i class="fa fa-home"></i></a></button>
@@ -185,6 +189,11 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script>
+        function handleKeyPress(event) {
+            if (event.keyCode === 13) { // Check if the pressed key is Enter
+                getResponse();
+            }
+        }
         async function getResponse() {
             try {
                 const userPrompt = document.getElementById('userPrompt').value;
@@ -209,11 +218,18 @@
         function displayResponse(response) {
             const responseContainer = document.getElementById('response-container');
             const codeBlockRegex = /```([\s\S]*?)```/g;
+            const boldRegex = /\*\*(.*?)\*\*/g;
 
             let formattedResponse = `<pre>${response}<pre>`;
 
+            // Replace code blocks
             formattedResponse = formattedResponse.replace(codeBlockRegex, (match, code) => {
                 return `<code>${code}</code>`;
+            });
+
+            // Replace bold text
+            formattedResponse = formattedResponse.replace(boldRegex, (match, content) => {
+                return `<strong>${content}</strong>`;
             });
             // Display the formatted response
             responseContainer.style.padding = "40px";
