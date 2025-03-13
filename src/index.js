@@ -5,7 +5,7 @@ const compression = require('compression');
 const httpStatus = require('http-status');
 const path = require('path');
 
-const { rateLimitMiddleware } = require('./middlewares');
+const { rateLimitMiddleware, reqMeta } = require('./middlewares');
 const CONFIG = require('./config/config');
 const { VERSION_ROUTE, API_PREFIX, VIEWS_FOLDER_PATH } = require('./constants/api-constant');
 const packageJson = require('../package.json');
@@ -18,12 +18,13 @@ const app = express();
 
 app.use(compression());
 
-app.set('trust proxy', true);
+app.set('trust proxy', false);
 
 // CORS AND PARSERS
 app.use(cors());
 app.use(express.json());
 app.use(rateLimitMiddleware);
+app.use(reqMeta);
 app.use(express.static(path.join(__dirname, `.${VIEWS_FOLDER_PATH}`)));
 app.use(express.urlencoded({ extended: true }));
 
@@ -48,6 +49,7 @@ app.get(`${VERSION_ROUTE}`, (req, res) => {
   res.json({
     name: packageJson.name,
     version: packageJson.version,
+    headers: req.headers,
     startTime: serverStartTime.toISOString(),
     upTime: timeDifference,
     ip: reqIp,
