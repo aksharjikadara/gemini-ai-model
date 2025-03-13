@@ -12,11 +12,13 @@ const packageJson = require('../package.json');
 const logger = require('./lib/logger/logger');
 const router = require('./routes');
 
+const serverStartTime = new Date();
+
 const app = express();
 
 app.use(compression());
 
-app.set('trust proxy', false);
+app.set('trust proxy', true);
 
 // CORS AND PARSERS
 app.use(cors());
@@ -38,7 +40,19 @@ app.use(`${API_PREFIX}`, router);
 const homePage = path.join(`${__dirname}${VIEWS_FOLDER_PATH}/home.html`);
 
 app.get('/', (req, res) => { res.status(httpStatus.OK).sendFile(homePage); });
-app.get(`${VERSION_ROUTE}`, (req, res) => { res.json({ version: packageJson.version }); });
+app.get(`${VERSION_ROUTE}`, (req, res) => {
+  const { meta } = req;
+  const timeDifference = Date.now() - serverStartTime.getTime();
+  const { reqIp } = meta;
+
+  res.json({
+    name: packageJson.name,
+    version: packageJson.version,
+    startTime: serverStartTime.toISOString(),
+    upTime: timeDifference,
+    ip: reqIp,
+  });
+});
 
 app.listen(CONFIG.PORT, () => {
   logger.info(`server started at http://localhost:${CONFIG.PORT}`);
